@@ -6,117 +6,53 @@
 <title>Insurance Industry Weekly Brief</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f5f5f0;
-    color: #1a1a1a;
-    min-height: 100vh;
-    padding: 2rem 1rem;
+    background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem;
   }
-
   .container { max-width: 780px; margin: 0 auto; }
-
-  /* Header */
-  .wp-header {
-    background: #fff;
-    border: 1px solid #e5e5e0;
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-  }
+  .wp-header { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
   .wp-header h1 { font-size: 26px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
   .wp-header p  { font-size: 13px; color: #888; }
-
-  /* Controls */
-  .controls {
-    display: flex; gap: 10px; align-items: center;
-    flex-wrap: wrap; margin-bottom: 1.25rem;
+  .api-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+  .api-box label { font-size: 13px; font-weight: 500; color: #92400e; display: block; margin-bottom: 6px; }
+  .api-box input {
+    width: 100%; font-size: 13px; padding: 8px 12px;
+    border: 1px solid #fcd34d; border-radius: 8px;
+    background: #fff; color: #1a1a1a; font-family: monospace;
   }
-  select, button {
-    font-size: 13px; padding: 8px 14px;
-    border: 1px solid #ddd; border-radius: 8px;
-    background: #fff; color: #1a1a1a; cursor: pointer;
-  }
-  button {
-    background: #1a1a2e; color: #fff; border-color: #1a1a2e;
-    font-weight: 500; transition: opacity .15s;
-  }
+  .api-box small { font-size: 11px; color: #92400e; display: block; margin-top: 5px; }
+  .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  select, button { font-size: 13px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; cursor: pointer; }
+  button { background: #1a1a2e; color: #fff; border-color: #1a1a2e; font-weight: 500; transition: opacity .15s; }
   button:hover { opacity: .85; }
   button:disabled { opacity: .45; cursor: not-allowed; }
-
   .status { font-size: 13px; color: #888; }
   .status.loading { color: #2563eb; }
   .status.done    { color: #16a34a; }
   .status.error   { color: #dc2626; }
-
-  /* Error box */
-  .error-box {
-    background: #fef2f2; border: 1px solid #fecaca;
-    border-radius: 8px; padding: 12px 16px;
-    font-size: 13px; color: #dc2626; margin-bottom: 1rem;
-  }
-
-  /* Stats */
+  .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #dc2626; margin-bottom: 1rem; }
   .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
-  .stat {
-    background: #fff; border: 1px solid #e5e5e0;
-    border-radius: 10px; padding: 1rem; text-align: center;
-  }
+  .stat { background: #fff; border: 1px solid #e5e5e0; border-radius: 10px; padding: 1rem; text-align: center; }
   .stat-n { font-size: 24px; font-weight: 600; color: #1a1a2e; }
   .stat-l { font-size: 12px; color: #888; margin-top: 2px; }
-
-  /* Section label */
-  .section-label {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: .08em; color: #888; margin: 1.5rem 0 .75rem;
-  }
-
-  /* Executive summary */
-  .exec-box {
-    background: #fff;
-    border-left: 3px solid #2563eb;
-    border-radius: 0 10px 10px 0;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
-    font-size: 14px; line-height: 1.75; color: #333;
-  }
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 1.5rem 0 .75rem; }
+  .exec-box { background: #fff; border-left: 3px solid #2563eb; border-radius: 0 10px 10px 0; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; font-size: 14px; line-height: 1.75; color: #333; }
   .exec-box p { margin-bottom: 10px; }
   .exec-box p:last-child { margin-bottom: 0; }
-
   hr.divider { border: none; border-top: 1px solid #e5e5e0; margin: 1.5rem 0; }
-
-  /* Article cards */
-  .article-card {
-    background: #fff; border: 1px solid #e5e5e0;
-    border-radius: 12px; padding: 1.25rem 1.5rem;
-    margin-bottom: 12px;
-  }
-  .article-num  { font-size: 11px; color: #aaa; margin-bottom: 4px; }
+  .article-card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 12px; }
+  .article-num   { font-size: 11px; color: #aaa; margin-bottom: 4px; }
   .article-title { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 6px; line-height: 1.4; }
   .article-headline { font-size: 13px; color: #555; margin-bottom: 10px; line-height: 1.5; }
   .bullets { padding-left: 18px; margin-bottom: 10px; }
   .bullets li { font-size: 13px; color: #333; margin-bottom: 4px; line-height: 1.5; }
-  .sig { font-size: 12px; color: #888; font-style: italic; margin-bottom: 10px; }
+  .sig  { font-size: 12px; color: #888; font-style: italic; margin-bottom: 10px; }
   .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag {
-    font-size: 11px; background: #eff6ff; color: #2563eb;
-    padding: 3px 9px; border-radius: 20px;
-  }
-  .source-badge {
-    font-size: 11px; background: #f5f5f0; color: #888;
-    padding: 3px 9px; border-radius: 20px;
-    border: 1px solid #e5e5e0;
-  }
-
-  /* Article link */
-  .article-link {
-    font-size: 11px; color: #2563eb; text-decoration: none;
-    display: inline-block; margin-top: 8px; word-break: break-all;
-  }
+  .tag  { font-size: 11px; background: #eff6ff; color: #2563eb; padding: 3px 9px; border-radius: 20px; }
+  .source-badge { font-size: 11px; background: #f5f5f0; color: #888; padding: 3px 9px; border-radius: 20px; border: 1px solid #e5e5e0; }
+  .article-link { font-size: 11px; color: #2563eb; text-decoration: none; display: inline-block; margin-top: 8px; word-break: break-all; }
   .article-link:hover { text-decoration: underline; }
-
-  /* Footer */
   .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 2rem; }
 </style>
 </head>
@@ -125,7 +61,13 @@
 
   <div class="wp-header">
     <h1>Insurance Industry Weekly Brief</h1>
-    <p id="date-line">Loading...</p>
+    <p id="date-line"></p>
+  </div>
+
+  <div class="api-box">
+    <label for="api-key">Anthropic API key</label>
+    <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
+    <small>Your key stays in this browser tab — never sent anywhere except api.anthropic.com. Get one at console.anthropic.com</small>
   </div>
 
   <div class="controls">
@@ -152,12 +94,9 @@
       <div class="stat"><div class="stat-n" id="s-sources">0</div><div class="stat-l">sources</div></div>
       <div class="stat"><div class="stat-n" id="s-cost">$0</div><div class="stat-l">est. API cost</div></div>
     </div>
-
     <div class="section-label">Executive summary</div>
     <div class="exec-box" id="exec-summary"></div>
-
     <hr class="divider" />
-
     <div class="section-label">Article summaries</div>
     <div id="articles-out"></div>
   </div>
@@ -186,15 +125,10 @@ function setStatus(msg, type="") {
   el.textContent = msg;
   el.className = "status" + (type ? " " + type : "");
 }
-
 function showError(msg) {
-  document.getElementById("error-out").innerHTML =
-    `<div class="error-box">&#9888; ${msg}</div>`;
+  document.getElementById("error-out").innerHTML = `<div class="error-box">&#9888; ${msg}</div>`;
 }
-
-function clearError() {
-  document.getElementById("error-out").innerHTML = "";
-}
+function clearError() { document.getElementById("error-out").innerHTML = ""; }
 
 async function fetchWithProxy(feedUrl) {
   for (const makeProxy of PROXIES) {
@@ -222,18 +156,20 @@ async function fetchFeed(key) {
   }));
 }
 
-async function summarizeArticles(articles) {
+async function summarizeArticles(articles, apiKey) {
   const list = articles.map((a,i) => `${i+1}. [${a.source}] ${a.title}`).join("\n");
-
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
     body: JSON.stringify({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1500,
-      messages: [{
-        role: "user",
-        content: `You are summarizing insurance industry news for a professional whitepaper.
+      messages: [{ role: "user", content: `You are summarizing insurance industry news for a professional whitepaper.
 
 Here are ${articles.length} article titles from insurance trade publications:
 ${list}
@@ -246,12 +182,13 @@ Return a JSON object with:
   - "significance": one sentence on why it matters to insurance professionals (max 25 words)
   - "tags": array of exactly 3 topic tags
 
-Respond with ONLY valid JSON, no markdown fences, no extra text.`
-      }]
+Respond with ONLY valid JSON, no markdown fences, no extra text.` }]
     })
   });
-
-  if (!res.ok) throw new Error(`API error ${res.status}`);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
   const data = await res.json();
   const raw = data.content[0].text.replace(/```json|```/g,"").trim();
   return JSON.parse(raw);
@@ -284,8 +221,14 @@ function renderArticles(articles, summaries) {
 async function runPipeline() {
   clearError();
   document.getElementById("output").style.display = "none";
-  document.getElementById("run-btn").disabled = true;
 
+  const apiKey = document.getElementById("api-key").value.trim();
+  if (!apiKey || !apiKey.startsWith("sk-ant-")) {
+    showError("Please enter your Anthropic API key above (starts with sk-ant-). Get one at console.anthropic.com");
+    return;
+  }
+
+  document.getElementById("run-btn").disabled = true;
   const feedSel  = document.getElementById("feed-select").value;
   const count    = parseInt(document.getElementById("count-select").value);
   const feedKeys = feedSel === "all" ? ["ij","ri","cm"] : [feedSel];
@@ -293,36 +236,29 @@ async function runPipeline() {
   let articles = [];
   for (const key of feedKeys) {
     setStatus(`Fetching ${FEEDS[key].label}...`, "loading");
-    const items = await fetchFeed(key);
-    articles.push(...items);
+    articles.push(...await fetchFeed(key));
   }
   articles = articles.slice(0, count);
 
   if (!articles.length) {
-    showError("Could not fetch articles — CORS proxies may be temporarily down. Wait a minute and try again, or run the Python script locally.");
-    setStatus("");
-    document.getElementById("run-btn").disabled = false;
-    return;
+    showError("Could not fetch articles — CORS proxies may be temporarily down. Try again in a minute.");
+    setStatus(""); document.getElementById("run-btn").disabled = false; return;
   }
 
   setStatus(`Summarizing ${articles.length} articles with Claude...`, "loading");
   let result;
   try {
-    result = await summarizeArticles(articles);
+    result = await summarizeArticles(articles, apiKey);
   } catch(e) {
     showError("Summarization failed: " + e.message);
-    setStatus("");
-    document.getElementById("run-btn").disabled = false;
-    return;
+    setStatus(""); document.getElementById("run-btn").disabled = false; return;
   }
 
   document.getElementById("exec-summary").innerHTML =
-    result.exec_summary.split("\n\n").filter(Boolean)
-      .map(p => `<p>${p.trim()}</p>`).join("");
-
+    result.exec_summary.split("\n\n").filter(Boolean).map(p=>`<p>${p.trim()}</p>`).join("");
   renderArticles(articles, result.articles);
 
-  const sources = [...new Set(articles.map(a => a.source))].length;
+  const sources = [...new Set(articles.map(a=>a.source))].length;
   document.getElementById("s-articles").textContent = articles.length;
   document.getElementById("s-sources").textContent  = sources;
   document.getElementById("s-cost").textContent     = "$" + (articles.length * 0.004).toFixed(2);
