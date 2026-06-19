@@ -114,11 +114,7 @@ const FEEDS = {
   cm: { label: "Carrier Management", url: "https://www.carriermanagement.com/feed/" },
 };
 
-const PROXIES = [
-  u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
-  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
-  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-];
+const WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
 
 document.getElementById("date-line").textContent =
   "Auto-generated  ·  " + new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
@@ -132,25 +128,23 @@ function showError(msg) {
 }
 function clearError() { document.getElementById("error-out").innerHTML = ""; }
 
-async function fetchWithProxy(feedUrl) {
-  for (const makeProxy of PROXIES) {
-    try {
-      const r = await fetch(makeProxy(feedUrl), { signal: AbortSignal.timeout(8000) });
-      if (!r.ok) continue;
-      const j = await r.json();
-      const xml = j.contents ?? j.data ?? (typeof j === "string" ? j : null);
-      if (!xml) continue;
-      const doc = new DOMParser().parseFromString(xml, "text/xml");
-      const items = [...doc.querySelectorAll("item")].slice(0, 6);
-      if (items.length) return items;
-    } catch(e) { continue; }
+async function fetchViaWorker(feedUrl) {
+  try {
+    const r = await fetch(`${WORKER_URL}/?url=${encodeURIComponent(feedUrl)}`, {
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) return [];
+    const xml = await r.text();
+    const doc = new DOMParser().parseFromString(xml, "text/xml");
+    return [...doc.querySelectorAll("item")].slice(0, 6);
+  } catch(e) {
+    return [];
   }
-  return [];
 }
 
 async function fetchFeed(key) {
   const { label, url } = FEEDS[key];
-  const items = await fetchWithProxy(url);
+  const items = await fetchViaWorker(url);
   return items.map(item => ({
     title:  item.querySelector("title")?.textContent?.trim() || "Untitled",
     url:    item.querySelector("link")?.textContent?.trim() || "",
@@ -248,7 +242,7 @@ async function runPipeline() {
   articles = articles.slice(0, count);
 
   if (!articles.length) {
-    showError("Could not fetch articles — CORS proxies may be temporarily down. Try again in a minute.");
+    showError("Could not fetch articles via the worker. Double-check the worker URL is correct and deployed.");
     setStatus(""); document.getElementById("run-btn").disabled = false; return;
   }
 
