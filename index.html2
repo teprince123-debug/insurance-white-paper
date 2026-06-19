@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insurance Industry Weekly Brief</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem;
+  }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  .wp-header { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
+  .wp-header h1 { font-size: 26px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .wp-header p { font-size: 13px; color: #888; }
+
+  .api-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+  .api-box label { font-size: 13px; font-weight: 500; color: #92400e; display: block; margin-bottom: 6px; }
+  .api-box input { width: 100%; font-size: 13px; padding: 8px 12px; border: 1px solid #fcd34d; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: monospace; }
+  .api-box small { font-size: 11px; color: #92400e; display: block; margin-top: 5px; }
+
+  .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  select, button { font-size: 13px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; cursor: pointer; }
+  button { background: #1a1a2e; color: #fff; border-color: #1a1a2e; font-weight: 500; transition: opacity .15s; }
+  button:hover { opacity: .85; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+
+  .status { font-size: 13px; color: #888; }
+  .status.loading { color: #2563eb; }
+  .status.done    { color: #16a34a; }
+  .status.error   { color: #dc2626; }
+
+  .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #dc2626; margin-bottom: 1rem; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .stat { background: #fff; border: 1px solid #e5e5e0; border-radius: 10px; padding: 1rem; text-align: center; }
+  .stat-n { font-size: 24px; font-weight: 600; color: #1a1a2e; }
+  .stat-l { font-size: 12px; color: #888; margin-top: 2px; }
+
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 1.5rem 0 .75rem; }
+
+  .article-card {
+    background: #fff; border: 1px solid #e5e5e0;
+    border-radius: 12px; padding: 1.25rem 1.5rem;
+    margin-bottom: 14px;
+  }
+  .article-heading {
+    font-size: 16px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 1rem; line-height: 1.4;
+    border-bottom: 2px solid #1a1a2e; padding-bottom: 0.6rem;
+  }
+  .fact-row { display: grid; grid-template-columns: 160px 1fr; gap: 6px 12px; margin-bottom: 10px; align-items: start; }
+  .fact-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #2563eb; padding-top: 2px; }
+  .fact-value { font-size: 13px; color: #333; line-height: 1.55; }
+  .card-footer { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+  .source-badge { font-size: 11px; background: #f5f5f0; color: #888; padding: 3px 9px; border-radius: 20px; border: 1px solid #e5e5e0; }
+  .article-link { font-size: 11px; color: #2563eb; text-decoration: none; }
+  .article-link:hover { text-decoration: underline; }
+
+  .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 2rem; }
+
+  .copy-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
+  #copy-btn { background: #16a34a; border-color: #16a34a; }
+  #copy-btn:hover { opacity: .85; }
+  .status.copied { color: #16a34a; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="wp-header">
+    <h1>Insurance Industry Weekly Brief</h1>
+    <p id="date-line"></p>
+  </div>
+
+  <div class="api-box">
+    <label for="api-key">Anthropic API key</label>
+    <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
+    <small>Your key stays in this browser tab — never sent anywhere except api.anthropic.com &nbsp;·&nbsp; Get one at console.anthropic.com</small>
+  </div>
+
+  <div class="controls">
+    <select id="feed-select">
+      <option value="all">All 3 feeds</option>
+      <option value="ij">Insurance Journal only</option>
+      <option value="ri">Risk &amp; Insurance only</option>
+      <option value="cm">Carrier Management only</option>
+    </select>
+    <select id="count-select">
+      <option value="5">5 articles</option>
+      <option value="8" selected>8 articles</option>
+      <option value="12">12 articles</option>
+    </select>
+    <button id="run-btn" onclick="runPipeline()">Generate brief</button>
+    <span class="status" id="status"></span>
+  </div>
+
+  <div id="error-out"></div>
+
+  <div id="output" style="display:none;">
+    <div class="stat-row">
+      <div class="stat"><div class="stat-n" id="s-articles">0</div><div class="stat-l">articles</div></div>
+      <div class="stat"><div class="stat-n" id="s-sources">0</div><div class="stat-l">sources</div></div>
+      <div class="stat"><div class="stat-n" id="s-cost">$0</div><div class="stat-l">est. API cost</div></div>
+    </div>
+    <div class="copy-row">
+      <button id="copy-btn" onclick="copyAsEmail()">📋 Copy as email</button>
+      <span class="status" id="copy-status"></span>
+    </div>
+    <div class="section-label">Articles</div>
+    <div id="articles-out"></div>
+  </div>
+
+  <div class="footer">Powered by Claude API &nbsp;·&nbsp; Insurance Journal · Risk &amp; Insurance · Carrier Management</div>
+</div>
+
+<script>
+const FEEDS = {
+  ij: { label: "Insurance Journal",  url: "https://www.insurancejournal.com/rss/news" },
+  ri: { label: "Risk & Insurance",   url: "https://riskandinsurance.com/feed/" },
+  cm: { label: "Carrier Management", url: "https://www.carriermanagement.com/feed/" },
+};
+
+const WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
+
+let lastArticles = [];
+let lastSummaries = [];
+
+document.getElementById("date-line").textContent =
+  "Auto-generated  ·  " + new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+
+function setStatus(msg, type="") {
+  const el = document.getElementById("status");
+  el.textContent = msg; el.className = "status" + (type ? " "+type : "");
+}
+function showError(msg) {
+  document.getElementById("error-out").innerHTML = `<div class="error-box">&#9888; ${msg}</div>`;
+}
+function clearError() { document.getElementById("error-out").innerHTML = ""; }
+
+async function fetchViaWorker(feedUrl) {
+  try {
+    const r = await fetch(`${WORKER_URL}/?url=${encodeURIComponent(feedUrl)}`, {
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) return [];
+    const xml = await r.text();
+    const doc = new DOMParser().parseFromString(xml, "text/xml");
+    return [...doc.querySelectorAll("item")].slice(0, 6);
+  } catch(e) {
+    return [];
+  }
+}
+
+async function fetchFeed(key) {
+  const { label, url } = FEEDS[key];
+  const items = await fetchViaWorker(url);
+  return items.map(item => ({
+    title:  item.querySelector("title")?.textContent?.trim() || "Untitled",
+    url:    item.querySelector("link")?.textContent?.trim() || "",
+    source: label,
+  }));
+}
+
+async function summarizeArticles(articles, apiKey) {
+  const list = articles.map((a,i) => `${i+1}. [${a.source}] ${a.title}`).join("\n");
+
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1500,
+      messages: [{ role: "user", content: `You are summarizing insurance industry news articles into a structured brief.
+
+Here are ${articles.length} article titles from insurance trade publications:
+${list}
+
+For each article return a structured summary. Respond with ONLY a valid JSON object, no markdown fences, no extra text.
+
+Return:
+{
+  "articles": [
+    {
+      "what_happened": "clear short summary of what happened (max 500 characters)",
+      "mentioned": "comma-separated list of every company, person, group, or entity mentioned in the article, e.g. Aetna, Liberty Mutual, FEMA, Jane Smith (max 500 characters)",
+      "why_it_matters": "why this news matters to insurance professionals (max 500 characters)"
+    }
+  ]
+}
+
+Return exactly ${articles.length} objects in the articles array, in the same order as the input list.` }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${res.status}`);
+  }
+  const data = await res.json();
+  const raw = data.content[0].text.replace(/```json|```/g,"").trim();
+  return JSON.parse(raw);
+}
+
+function renderArticles(articles, summaries) {
+  const container = document.getElementById("articles-out");
+  container.innerHTML = "";
+  articles.forEach((article, i) => {
+    const s = summaries[i];
+    if (!s) return;
+    const card = document.createElement("div");
+    card.className = "article-card";
+    card.innerHTML = `
+      <div class="article-heading">${article.title}</div>
+      <div class="fact-row"><span class="fact-label">What happened?</span><span class="fact-value">${s.what_happened}</span></div>
+      <div class="fact-row"><span class="fact-label">Mentioned in article</span><span class="fact-value">${s.mentioned}</span></div>
+      <div class="fact-row"><span class="fact-label">Why it matters?</span><span class="fact-value">${s.why_it_matters}</span></div>
+      <div class="card-footer">
+        <span class="source-badge">${article.source}</span>
+        ${article.url ? `<a class="article-link" href="${article.url}" target="_blank" rel="noopener">Read full article →</a>` : ""}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+async function runPipeline() {
+  clearError();
+  document.getElementById("output").style.display = "none";
+
+  const apiKey = document.getElementById("api-key").value.trim();
+  if (!apiKey || !apiKey.startsWith("sk-ant-")) {
+    showError("Please enter your Anthropic API key above (starts with sk-ant-). Get one at console.anthropic.com");
+    return;
+  }
+
+  document.getElementById("run-btn").disabled = true;
+  const feedSel  = document.getElementById("feed-select").value;
+  const count    = parseInt(document.getElementById("count-select").value);
+  const feedKeys = feedSel === "all" ? ["ij","ri","cm"] : [feedSel];
+
+  let articles = [];
+  for (const key of feedKeys) {
+    setStatus(`Fetching ${FEEDS[key].label}...`, "loading");
+    articles.push(...await fetchFeed(key));
+  }
+  articles = articles.slice(0, count);
+
+  if (!articles.length) {
+    showError("Could not fetch articles via the worker. Double-check the worker URL is correct and deployed.");
+    setStatus(""); document.getElementById("run-btn").disabled = false; return;
+  }
+
+  setStatus(`Summarizing ${articles.length} articles...`, "loading");
+  let result;
+  try {
+    result = await summarizeArticles(articles, apiKey);
+  } catch(e) {
+    showError("Summarization failed: " + e.message);
+    setStatus(""); document.getElementById("run-btn").disabled = false; return;
+  }
+
+  renderArticles(articles, result.articles);
+  lastArticles = articles;
+  lastSummaries = result.articles;
+
+  const sources = [...new Set(articles.map(a=>a.source))].length;
+  document.getElementById("s-articles").textContent = articles.length;
+  document.getElementById("s-sources").textContent  = sources;
+  document.getElementById("s-cost").textContent     = "$" + (articles.length * 0.004).toFixed(2);
+
+  document.getElementById("output").style.display = "block";
+  setStatus("Done ✓", "done");
+  document.getElementById("run-btn").disabled = false;
+}
+
+function copyAsEmail() {
+  const dateStr = new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+  let text = `INSURANCE INDUSTRY WEEKLY BRIEF\n${dateStr}\n`;
+  text += `${"=".repeat(50)}\n\n`;
+
+  lastArticles.forEach((article, i) => {
+    const s = lastSummaries[i];
+    if (!s) return;
+    text += `${i+1}. ${article.title}\n`;
+    text += `${"-".repeat(40)}\n`;
+    text += `What happened: ${s.what_happened}\n\n`;
+    text += `Mentioned in article: ${s.mentioned}\n\n`;
+    text += `Why it matters: ${s.why_it_matters}\n\n`;
+    text += `Source: ${article.source}\n`;
+    if (article.url) text += `Read more: ${article.url}\n`;
+    text += `\n\n`;
+  });
+
+  text += `\nInsurance Journal · Risk & Insurance · Carrier Management`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const el = document.getElementById("copy-status");
+    el.textContent = "Copied! Paste into your email.";
+    el.className = "status copied";
+    setTimeout(() => { el.textContent = ""; }, 4000);
+  }).catch(() => {
+    const el = document.getElementById("copy-status");
+    el.textContent = "Copy failed — select and copy manually.";
+    el.className = "status error";
+  });
+}
+</script>
+</body>
+</html>
