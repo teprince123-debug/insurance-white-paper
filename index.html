@@ -6,10 +6,7 @@
 <title>Pravven Brief</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
   .container { max-width: 780px; margin: 0 auto; }
   .wp-header { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
   .wp-header h1 { font-size: 26px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
@@ -25,14 +22,17 @@
   button:disabled { opacity: .45; cursor: not-allowed; }
   .status { font-size: 13px; color: #888; }
   .status.loading { color: #2563eb; }
-  .status.done    { color: #16a34a; }
-  .status.error   { color: #dc2626; }
+  .status.done { color: #16a34a; }
+  .status.error { color: #dc2626; }
+  .status.copied { color: #16a34a; }
   .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #dc2626; margin-bottom: 1rem; }
   .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
   .stat { background: #fff; border: 1px solid #e5e5e0; border-radius: 10px; padding: 1rem; text-align: center; }
   .stat-n { font-size: 24px; font-weight: 600; color: #1a1a2e; }
   .stat-l { font-size: 12px; color: #888; margin-top: 2px; }
   .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 1.5rem 0 .75rem; }
+  .copy-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
+  #copy-btn { background: #16a34a; border-color: #16a34a; }
   .article-card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 14px; }
   .article-heading { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 1rem; line-height: 1.4; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.6rem; }
   .fact-row { display: grid; grid-template-columns: 160px 1fr; gap: 6px 12px; margin-bottom: 10px; align-items: start; }
@@ -47,9 +47,6 @@
   .article-link { font-size: 11px; color: #2563eb; text-decoration: none; }
   .article-link:hover { text-decoration: underline; }
   .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 2rem; }
-  .copy-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
-  #copy-btn { background: #16a34a; border-color: #16a34a; }
-  .status.copied { color: #16a34a; }
 </style>
 </head>
 <body>
@@ -63,7 +60,7 @@
   <div class="api-box">
     <label for="api-key">Anthropic API key</label>
     <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
-    <small>Your key stays in this browser tab only &nbsp;·&nbsp; Get one at console.anthropic.com</small>
+    <small>Your key stays in this browser tab only &nbsp;&middot;&nbsp; Get one at console.anthropic.com</small>
   </div>
 
   <div class="controls">
@@ -99,21 +96,20 @@
     <div id="articles-out"></div>
   </div>
 
-  <div class="footer">Pravven Brief &nbsp;·&nbsp; Insurance Journal &middot; Risk &amp; Insurance &middot; Carrier Management &middot; Reinsurance News</div>
+  <div class="footer">Pravven Brief &nbsp;&middot;&nbsp; Insurance Journal &middot; Risk &amp; Insurance &middot; Carrier Management &middot; Reinsurance News</div>
 </div>
 
 <script>
-const FEEDS = {
+var FEEDS = {
   ij: { label: "Insurance Journal",  url: "https://www.insurancejournal.com/rss/news" },
   ri: { label: "Risk & Insurance",   url: "https://riskandinsurance.com/feed/" },
   cm: { label: "Carrier Management", url: "https://www.carriermanagement.com/feed/" },
-  rn: { label: "Reinsurance News",   url: "https://www.reinsurancene.ws/feed/" },
+  rn: { label: "Reinsurance News",   url: "https://www.reinsurancene.ws/feed/" }
 };
 
-const WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
-
-let lastArticles = [];
-let lastResult   = { articles: [] };
+var WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
+var lastArticles = [];
+var lastResult = { articles: [] };
 
 document.getElementById("date-line").textContent =
   "Executive Insurance Intelligence  \u00b7  " +
@@ -125,15 +121,13 @@ function setStatus(msg, type) {
   el.className = "status" + (type ? " " + type : "");
 }
 function showError(msg) {
-  document.getElementById("error-out").innerHTML =
-    '<div class="error-box">&#9888; ' + msg + '</div>';
+  document.getElementById("error-out").innerHTML = '<div class="error-box">&#9888; ' + msg + '</div>';
 }
 function clearError() { document.getElementById("error-out").innerHTML = ""; }
 
 async function fetchViaWorker(feedUrl) {
   try {
-    var r = await fetch(WORKER_URL + "/?url=" + encodeURIComponent(feedUrl),
-      { signal: AbortSignal.timeout(10000) });
+    var r = await fetch(WORKER_URL + "/?url=" + encodeURIComponent(feedUrl), { signal: AbortSignal.timeout(10000) });
     if (!r.ok) return [];
     var xml = await r.text();
     var doc = new DOMParser().parseFromString(xml, "text/xml");
@@ -145,9 +139,11 @@ async function fetchFeed(key) {
   var feed = FEEDS[key];
   var items = await fetchViaWorker(feed.url);
   return items.map(function(item) {
+    var titleEl = item.querySelector("title");
+    var linkEl  = item.querySelector("link");
     return {
-      title:  (item.querySelector("title") || {}).textContent.trim() || "Untitled",
-      url:    (item.querySelector("link")  || {}).textContent.trim() || "",
+      title:  titleEl ? titleEl.textContent.trim() : "Untitled",
+      url:    linkEl  ? linkEl.textContent.trim()  : "",
       source: feed.label
     };
   });
@@ -155,18 +151,18 @@ async function fetchFeed(key) {
 
 async function summarizeArticles(articles, apiKey) {
   var list = articles.map(function(a, i) {
-    return (i+1) + ". [" + a.source + "] " + a.title + "\nURL: " + a.url;
+    return (i + 1) + ". [" + a.source + "] " + a.title + "\nURL: " + a.url;
   }).join("\n\n");
 
   var prompt = "You are producing a Pravven Brief: a structured, executive-level summary of material insurance-industry news.\n\n" +
     "A Pravven Brief identifies what materially happened, who is affected, why it matters commercially, and what professionals should monitor next.\n\n" +
     "AUDIENCE: Senior carrier executives, brokers, reinsurers, employee-benefits leaders, wholesale and specialty professionals at firms such as Liberty Mutual, Marsh, Travelers, Aon, Hanover, Everest, Swiss Re, Sun Life, Lockton, WTW, Guy Carpenter, and Amwins.\n\n" +
-    "VOICE: Clear. Calm. Precise. Commercially relevant. Insurance-literate. Evidence-based. Decision-oriented. Assume deep industry knowledge. Never explain basic concepts. State specifically what may change, for whom, and why. Avoid generic statements. Avoid exaggerated language like game-changing or revolutionary unless directly supported by evidence.\n\n" +
+    "VOICE: Clear. Calm. Precise. Commercially relevant. Insurance-literate. Evidence-based. Decision-oriented. Assume deep industry knowledge. Never explain basic concepts. State specifically what may change, for whom, and why. Avoid generic statements. Avoid exaggerated language.\n\n" +
     "ACCURACY: Distinguish completed actions from announced plans. Preserve material figures, dates, transaction values, premium changes, loss estimates. Attribute estimates and forecasts. Distinguish proposed from effective regulations and announced from completed transactions.\n\n" +
-    "ARTICLE SELECTION: Prioritize material developments affecting risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, competition, operating models, or technology. Deprioritize routine appointments without strategic implications, generic thought-leadership without material data, and local incidents with no broader market implications.\n\n" +
+    "ARTICLE SELECTION: Prioritize material developments affecting risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, competition, operating models, or technology. Deprioritize routine appointments without strategic implications and local incidents with no broader market implications.\n\n" +
     "DUPLICATE HANDLING: If multiple articles cover the same event, treat as one development. Use strongest factual source as primary. List others in supporting_sources.\n\n" +
     "Here are the articles:\n" + list + "\n\n" +
-    "Return one valid JSON object only. No markdown, no code fences, no commentary:\n\n" +
+    "Return one valid JSON object only. No markdown, no code fences, no commentary.\n\n" +
     "{\n" +
     "  \"brief_name\": \"Pravven Brief\",\n" +
     "  \"articles_reviewed\": " + articles.length + ",\n" +
@@ -177,15 +173,15 @@ async function summarizeArticles(articles, apiKey) {
     "      \"source_publication\": \"Primary source publication name\",\n" +
     "      \"source_url\": \"Primary article URL\",\n" +
     "      \"supporting_sources\": [],\n" +
-    "      \"what_happened\": \"Concise explanation of the material development. Preserve key figures, dates, values. Distinguish completed actions from announced plans. Max 500 characters.\",\n" +
-    "      \"mentioned\": [\"Company, person, regulator, market, or geography materially involved\"],\n" +
+    "      \"what_happened\": \"Concise explanation of the material development. Preserve key figures, dates, values. Max 500 characters.\",\n" +
+    "      \"mentioned\": [\"Company, person, regulator, or geography materially involved\"],\n" +
     "      \"most_relevant_to\": [\"Most directly affected audience such as carrier executives, brokers, reinsurers, employee-benefits leaders, wholesale professionals, underwriting leaders, claims leaders, risk managers, or regulatory teams\"],\n" +
-    "      \"why_it_matters\": \"Why this matters to the most directly affected stakeholders. Focus on implications for risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, competitive positioning, or technology. State what may change, for whom, and why. Max 500 characters.\",\n" +
-    "      \"what_to_watch\": \"Next observable decision, regulatory action, market response, financial result, renewal outcome, or risk indicator to monitor. No unsupported predictions. Max 350 characters.\"\n" +
+    "      \"why_it_matters\": \"Why this matters to the most directly affected stakeholders. Focus on implications for risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, or technology. Max 500 characters.\",\n" +
+    "      \"what_to_watch\": \"Next observable decision, regulatory action, market response, financial result, or risk indicator to monitor. No unsupported predictions. Max 350 characters.\"\n" +
     "    }\n" +
     "  ]\n" +
     "}\n\n" +
-    "Return exactly " + articles.length + " objects in the same order as input. Set articles_included to the count of articles with substantive summaries. If content is insufficient set what_happened to Insufficient article content for a reliable summary and other fields to empty arrays or NA.";
+    "Return exactly " + articles.length + " objects in the same order as input. Set articles_included to the count of articles with substantive summaries. If content is insufficient set what_happened to: Insufficient article content for a reliable summary.";
 
   var res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -203,7 +199,7 @@ async function summarizeArticles(articles, apiKey) {
   });
 
   if (!res.ok) {
-    var err = await res.json().catch(function(){ return {}; });
+    var err = await res.json().catch(function() { return {}; });
     throw new Error((err.error && err.error.message) || ("API error " + res.status));
   }
   var data = await res.json();
@@ -214,28 +210,33 @@ async function summarizeArticles(articles, apiKey) {
 function renderArticles(articles, result) {
   var container = document.getElementById("articles-out");
   container.innerHTML = "";
-  var arts = result.articles || result;
+  var arts = result.articles || [];
   arts.forEach(function(s, i) {
     if (!s) return;
+    var mentioned  = Array.isArray(s.mentioned) ? s.mentioned.join(", ") : (s.mentioned || "");
+    var audience   = Array.isArray(s.most_relevant_to) ? s.most_relevant_to : [];
+    var sourceUrl  = s.source_url || (articles[i] ? articles[i].url : "");
+    var sourcePub  = s.source_publication || (articles[i] ? articles[i].source : "");
+    var title      = s.article_title || (articles[i] ? articles[i].title : "");
     var card = document.createElement("div");
     card.className = "article-card";
-    var mentioned   = Array.isArray(s.mentioned) ? s.mentioned.join(", ") : (s.mentioned || "");
-    var audience    = Array.isArray(s.most_relevant_to) ? s.most_relevant_to : [];
-    var sourceUrl   = s.source_url || (articles[i] && articles[i].url) || "";
-    var sourcePub   = s.source_publication || (articles[i] && articles[i].source) || "";
-    var title       = s.article_title || (articles[i] && articles[i].title) || "";
-    var html = '<div class="article-heading">' + title + '</div>' +
-      '<div class="fact-row"><span class="fact-label">What happened?</span><span class="fact-value">' + s.what_happened + '</span></div>' +
+    var html =
+      '<div class="article-heading">' + title + '</div>' +
+      '<div class="fact-row"><span class="fact-label">What happened?</span><span class="fact-value">' + (s.what_happened || "") + '</span></div>' +
       '<div class="fact-row"><span class="fact-label">Mentioned in article</span><span class="fact-value">' + mentioned + '</span></div>' +
-      '<div class="fact-row"><span class="fact-label">Why it matters?</span><span class="fact-value">' + s.why_it_matters + '</span></div>';
+      '<div class="fact-row"><span class="fact-label">Why it matters?</span><span class="fact-value">' + (s.why_it_matters || "") + '</span></div>';
     if (s.what_to_watch) {
       html += '<div class="watch-box"><div class="watch-label">What to watch</div>' + s.what_to_watch + '</div>';
     }
     if (audience.length) {
-      html += '<div class="audience-pills">' + audience.map(function(a){ return '<span class="audience-pill">' + a + '</span>'; }).join("") + '</div>';
+      html += '<div class="audience-pills">' + audience.map(function(a) {
+        return '<span class="audience-pill">' + a + '</span>';
+      }).join("") + '</div>';
     }
     html += '<div class="card-footer"><span class="source-badge">' + sourcePub + '</span>';
-    if (sourceUrl) html += '<a class="article-link" href="' + sourceUrl + '" target="_blank" rel="noopener">Read full article &#8594;</a>';
+    if (sourceUrl) {
+      html += '<a class="article-link" href="' + sourceUrl + '" target="_blank" rel="noopener">Read full article &#8594;</a>';
+    }
     html += '</div>';
     card.innerHTML = html;
     container.appendChild(card);
@@ -245,18 +246,15 @@ function renderArticles(articles, result) {
 async function runPipeline() {
   clearError();
   document.getElementById("output").style.display = "none";
-
   var apiKey = document.getElementById("api-key").value.trim();
   if (!apiKey || !apiKey.startsWith("sk-ant-")) {
     showError("Please enter your Anthropic API key above (starts with sk-ant-). Get one at console.anthropic.com");
     return;
   }
-
   document.getElementById("run-btn").disabled = true;
   var feedSel  = document.getElementById("feed-select").value;
   var count    = parseInt(document.getElementById("count-select").value);
-  var feedKeys = feedSel === "all" ? ["ij","ri","cm","rn"] : [feedSel];
-
+  var feedKeys = feedSel === "all" ? ["ij", "ri", "cm", "rn"] : [feedSel];
   var articles = [];
   for (var k = 0; k < feedKeys.length; k++) {
     setStatus("Fetching " + FEEDS[feedKeys[k]].label + "...", "loading");
@@ -264,12 +262,10 @@ async function runPipeline() {
     articles = articles.concat(items);
   }
   articles = articles.slice(0, count);
-
   if (!articles.length) {
-    showError("Could not fetch articles. Check that your Cloudflare Worker is deployed and the feeds are reachable.");
+    showError("Could not fetch articles. Check that your Cloudflare Worker is deployed.");
     setStatus(""); document.getElementById("run-btn").disabled = false; return;
   }
-
   setStatus("Generating Pravven Brief for " + articles.length + " articles...", "loading");
   var result;
   try {
@@ -278,16 +274,14 @@ async function runPipeline() {
     showError("Summarization failed: " + e.message);
     setStatus(""); document.getElementById("run-btn").disabled = false; return;
   }
-
   renderArticles(articles, result);
   lastArticles = articles;
   lastResult   = result;
-
-  var sources = new Set(articles.map(function(a){ return a.source; })).size;
+  var sources = {};
+  articles.forEach(function(a) { sources[a.source] = 1; });
   document.getElementById("s-articles").textContent = result.articles_included || articles.length;
-  document.getElementById("s-sources").textContent  = sources;
+  document.getElementById("s-sources").textContent  = Object.keys(sources).length;
   document.getElementById("s-cost").textContent     = "$" + (articles.length * 0.006).toFixed(2);
-
   document.getElementById("output").style.display = "block";
   setStatus("Done \u2713", "done");
   document.getElementById("run-btn").disabled = false;
@@ -295,37 +289,34 @@ async function runPipeline() {
 
 function copyAsEmail() {
   var dateStr = new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
-  var text = "PRAVVEN BRIEF\n" + dateStr + "\n" + "=".repeat(50) + "\n\n";
-
+  var text = "PRAVVEN BRIEF\n" + dateStr + "\n==================================================\n\n";
   var arts = lastResult.articles || [];
   arts.forEach(function(s, i) {
     if (!s) return;
     var mentioned = Array.isArray(s.mentioned) ? s.mentioned.join(", ") : (s.mentioned || "");
     var audience  = Array.isArray(s.most_relevant_to) ? s.most_relevant_to.join(", ") : "";
-    var sourceUrl = s.source_url || (lastArticles[i] && lastArticles[i].url) || "";
-    var sourcePub = s.source_publication || (lastArticles[i] && lastArticles[i].source) || "";
-    text += (i+1) + ". " + (s.article_title || "") + "\n";
-    text += "-".repeat(40) + "\n";
-    text += "What happened: " + s.what_happened + "\n\n";
+    var sourceUrl = s.source_url || (lastArticles[i] ? lastArticles[i].url : "");
+    var sourcePub = s.source_publication || (lastArticles[i] ? lastArticles[i].source : "");
+    text += (i + 1) + ". " + (s.article_title || "") + "\n";
+    text += "----------------------------------------\n";
+    text += "What happened: " + (s.what_happened || "") + "\n\n";
     text += "Mentioned: " + mentioned + "\n\n";
-    text += "Why it matters: " + s.why_it_matters + "\n\n";
+    text += "Why it matters: " + (s.why_it_matters || "") + "\n\n";
     if (s.what_to_watch) text += "What to watch: " + s.what_to_watch + "\n\n";
     if (audience) text += "Most relevant to: " + audience + "\n\n";
     text += "Source: " + sourcePub + "\n";
     if (sourceUrl) text += "Read more: " + sourceUrl + "\n";
     text += "\n\n";
   });
-
   text += "Pravven Brief  \u00b7  Insurance Journal \u00b7 Risk & Insurance \u00b7 Carrier Management \u00b7 Reinsurance News";
-
   navigator.clipboard.writeText(text).then(function() {
     var el = document.getElementById("copy-status");
     el.textContent = "Copied! Paste into your email.";
     el.className = "status copied";
-    setTimeout(function(){ el.textContent = ""; }, 4000);
+    setTimeout(function() { el.textContent = ""; }, 4000);
   }).catch(function() {
     var el = document.getElementById("copy-status");
-    el.textContent = "Copy failed — select and copy manually.";
+    el.textContent = "Copy failed - select and copy manually.";
     el.className = "status error";
   });
 }
