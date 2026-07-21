@@ -83,10 +83,11 @@
 
   <div class="controls">
     <select id="feed-select">
-      <option value="all">All 3 feeds</option>
+      <option value="all">All 4 feeds</option>
       <option value="ij">Insurance Journal only</option>
       <option value="ri">Risk &amp; Insurance only</option>
       <option value="cm">Carrier Management only</option>
+      <option value="rn">Reinsurance News only</option>
     </select>
     <select id="count-select">
       <option value="5">5 articles</option>
@@ -113,7 +114,7 @@
     <div id="articles-out"></div>
   </div>
 
-  <div class="footer">Powered by Claude API &nbsp;·&nbsp; Insurance Journal · Risk &amp; Insurance · Carrier Management</div>
+  <div class="footer">Powered by Claude API &nbsp;·&nbsp; Insurance Journal · Risk &amp; Insurance · Carrier Management · Reinsurance News</div>
 </div>
 
 <script>
@@ -121,6 +122,7 @@ const FEEDS = {
   ij: { label: "Insurance Journal",  url: "https://www.insurancejournal.com/rss/news" },
   ri: { label: "Risk & Insurance",   url: "https://riskandinsurance.com/feed/" },
   cm: { label: "Carrier Management", url: "https://www.carriermanagement.com/feed/" },
+  rn: { label: "Reinsurance News",   url: "https://www.reinsurancene.ws/feed/" },
 };
 
 const WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
@@ -178,7 +180,7 @@ async function summarizeArticles(articles, apiKey) {
     body: JSON.stringify({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 1500,
-      messages: [{ role: "user", content: `You are summarizing insurance industry news articles into a structured brief.
+      messages: [{ role: "user", content: `You are summarizing insurance industry news articles into a structured brief for a senior audience of carrier executives, brokers, reinsurers, and wholesale/specialty professionals — primarily from firms like Liberty Mutual, Marsh, Travelers, Aon, Hanover, Everest, Sun Life, Lockton, Swiss Re, Guy Carpenter, XS Brokers, and Amwins. Summaries should be concise, precise, and assume deep industry knowledge. Avoid explaining basic insurance concepts.
 
 Here are ${articles.length} article titles from insurance trade publications:
 ${list}
@@ -191,7 +193,7 @@ Return:
     {
       "what_happened": "clear short summary of what happened (max 500 characters)",
       "mentioned": "comma-separated list of every company, person, group, or entity mentioned in the article, e.g. Aetna, Liberty Mutual, FEMA, Jane Smith (max 500 characters)",
-      "why_it_matters": "why this news matters to insurance professionals (max 500 characters)"
+      "why_it_matters": "why this news matters specifically to carrier executives, brokers, and wholesale/specialty professionals — focus on market capacity, pricing trends, regulatory impact, distribution shifts, competitive dynamics, or technology disruption (max 500 characters)"
     }
   ]
 }
@@ -244,7 +246,7 @@ async function runPipeline() {
   document.getElementById("run-btn").disabled = true;
   const feedSel  = document.getElementById("feed-select").value;
   const count    = parseInt(document.getElementById("count-select").value);
-  const feedKeys = feedSel === "all" ? ["ij","ri","cm"] : [feedSel];
+  const feedKeys = feedSel === "all" ? ["ij","ri","cm","rn"] : [feedSel];
 
   let articles = [];
   for (const key of feedKeys) {
@@ -299,7 +301,7 @@ function copyAsEmail() {
     text += `\n\n`;
   });
 
-  text += `\nInsurance Journal · Risk & Insurance · Carrier Management`;
+  text += `\nInsurance Journal · Risk & Insurance · Carrier Management · Reinsurance News`;
 
   navigator.clipboard.writeText(text).then(() => {
     const el = document.getElementById("copy-status");
