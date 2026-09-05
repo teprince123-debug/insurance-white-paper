@@ -27,6 +27,6 @@ window.PRAVVEN_CONFIG = {
   /* ---- Contact address ---------------------------------------------------
      Used for the fallback links and the "or just email us" line.
      ---------------------------------------------------------------------- */
-  contactEmail: "hello@pravven.com"
+  contactEmail: "pravvenhq@gmail.com"
 
 };
