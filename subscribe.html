@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Subscribe — The Pravven Brief</title>
+<meta name="description" content="Get The Pravven Brief by email — what materially moved in insurance, why it matters, and what to watch." />
+<meta property="og:title" content="Subscribe — The Pravven Brief" />
+<meta property="og:description" content="Get The Pravven Brief by email." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pravven.com/subscribe.html" />
+<meta property="og:image" content="https://pravven.com/logo.png" />
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="logo.png" alt="" />
+      <span>Pravven</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="brief.html">The Brief</a>
+      <a href="archive.html">Archive</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="subscribe.html" aria-current="page">Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap read">
+
+    <div class="page-head">
+      <p class="kicker">Subscribe</p>
+      <h1>Get the Brief by email</h1>
+      <p>What materially happened in insurance, why it matters, and what to watch next — with a link to the original reporting every time. No filler, and you can unsubscribe from any issue.</p>
+    </div>
+
+    <div class="form-card" style="margin-top:30px;">
+
+      <form id="subscribe-form" method="post" target="_blank" novalidate hidden>
+        <div class="field">
+          <label for="sub-email">Email address</label>
+          <input type="email" id="sub-email" name="EMAIL" autocomplete="email" required placeholder="you@company.com" />
+        </div>
+        <div class="field">
+          <label for="sub-fname">First name <span class="muted" style="font-weight:400;">(optional)</span></label>
+          <input type="text" id="sub-fname" name="FNAME" autocomplete="given-name" />
+        </div>
+        <div aria-hidden="true" style="position:absolute;left:-5000px;">
+          <input type="text" id="mc-bot-field" name="" tabindex="-1" value="" />
+        </div>
+        <button class="btn btn-primary" type="submit">Subscribe</button>
+        <p class="form-note">We use your email to send the Brief and nothing else. No sharing, no selling.</p>
+      </form>
+
+      <div id="subscribe-fallback" hidden>
+        <p style="margin-bottom:18px;">The Brief is sent from a small list. To be added, email us and we'll add you to the next send.</p>
+        <p><a class="btn btn-primary" id="sub-mail-btn" href="#">Email to subscribe</a></p>
+        <p class="form-note">Put anything in the subject line — we just need your address.</p>
+      </div>
+
+    </div>
+
+    <div class="section">
+      <p class="section-label">What you get</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>Only what moved</h3>
+          <p>Routine appointments and local incidents are screened out. What's left is the developments that change risk, capital, pricing, distribution or regulation.</p>
+        </div>
+        <div class="card">
+          <h3>Sourced, always</h3>
+          <p>Every item names its publication and links to the full article. Figures and attributions stay with the original reporting.</p>
+        </div>
+        <div class="card">
+          <h3>Built to skim</h3>
+          <p>What happened, why it matters, what to watch — the same three questions in the same order, every issue.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="muted small">Want to see it first? <a href="brief.html">Read the current issue</a>.</p>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="" />
+        <span>Pravven</span>
+      </a>
+      <p class="f-tag">Benefits clarity before benefits decisions.</p>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-col">
+        <h4>Read</h4>
+        <a href="brief.html">The Brief</a>
+        <a href="archive.html">Archive</a>
+        <a href="subscribe.html">Subscribe</a>
+      </div>
+      <div class="footer-col">
+        <h4>Pravven</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="footer-base">© 2026 Pravven. The Pravven Brief is general industry information, not legal, medical, tax or insurance advice. Coverage decisions should be confirmed with your plan documents, HR team, broker or carrier.</p>
+  </div>
+</footer>
+
+<script src="site-config.js"></script>
+<script>
+(function () {
+  var cfg  = window.PRAVVEN_CONFIG || {};
+  var form = document.getElementById("subscribe-form");
+  var fall = document.getElementById("subscribe-fallback");
+
+  if (cfg.mailchimpAction) {
+    form.action = cfg.mailchimpAction;
+    if (cfg.mailchimpBotField) {
+      document.getElementById("mc-bot-field").name = cfg.mailchimpBotField;
+    }
+    form.hidden = false;
+  } else {
+    var mail = cfg.contactEmail || "hello@pravven.com";
+    document.getElementById("sub-mail-btn").href =
+      "mailto:" + mail + "?subject=" + encodeURIComponent("Subscribe me to the Pravven Brief");
+    fall.hidden = false;
+  }
+})();
+</script>
+
+</body>
+</html>

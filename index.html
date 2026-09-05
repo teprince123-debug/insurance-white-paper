@@ -3,323 +3,117 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pravven Brief</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem; }
-  .container { max-width: 780px; margin: 0 auto; }
-  .wp-header { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; }
-  .wp-header h1 { font-size: 26px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
-  .wp-header p { font-size: 13px; color: #888; }
-  .api-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
-  .api-box label { font-size: 13px; font-weight: 500; color: #92400e; display: block; margin-bottom: 6px; }
-  .api-box input { width: 100%; font-size: 13px; padding: 8px 12px; border: 1px solid #fcd34d; border-radius: 8px; background: #fff; color: #1a1a1a; font-family: monospace; }
-  .api-box small { font-size: 11px; color: #92400e; display: block; margin-top: 5px; }
-  .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
-  select, button { font-size: 13px; padding: 8px 14px; border: 1px solid #ddd; border-radius: 8px; background: #fff; color: #1a1a1a; cursor: pointer; }
-  button { background: #1a1a2e; color: #fff; border-color: #1a1a2e; font-weight: 500; transition: opacity .15s; }
-  button:hover { opacity: .85; }
-  button:disabled { opacity: .45; cursor: not-allowed; }
-  .status { font-size: 13px; color: #888; }
-  .status.loading { color: #2563eb; }
-  .status.done { color: #16a34a; }
-  .status.error { color: #dc2626; }
-  .status.copied { color: #16a34a; }
-  .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #dc2626; margin-bottom: 1rem; }
-  .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
-  .stat { background: #fff; border: 1px solid #e5e5e0; border-radius: 10px; padding: 1rem; text-align: center; }
-  .stat-n { font-size: 24px; font-weight: 600; color: #1a1a2e; }
-  .stat-l { font-size: 12px; color: #888; margin-top: 2px; }
-  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #888; margin: 1.5rem 0 .75rem; }
-  .copy-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; }
-  #copy-btn { background: #16a34a; border-color: #16a34a; }
-  .article-card { background: #fff; border: 1px solid #e5e5e0; border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 14px; }
-  .article-heading { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 1rem; line-height: 1.4; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.6rem; }
-  .fact-row { display: grid; grid-template-columns: 160px 1fr; gap: 6px 12px; margin-bottom: 10px; align-items: start; }
-  .fact-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: #2563eb; padding-top: 2px; }
-  .fact-value { font-size: 13px; color: #333; line-height: 1.55; }
-  .watch-box { background: #f0f4ff; border-left: 3px solid #2563eb; border-radius: 0 8px 8px 0; padding: 8px 12px; margin-top: 10px; font-size: 12px; color: #1e3a8a; line-height: 1.5; }
-  .watch-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #2563eb; margin-bottom: 3px; }
-  .audience-pills { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
-  .audience-pill { font-size: 10px; background: #f0fdf4; color: #166534; padding: 2px 8px; border-radius: 20px; border: 1px solid #bbf7d0; }
-  .card-footer { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
-  .source-badge { font-size: 11px; background: #f5f5f0; color: #888; padding: 3px 9px; border-radius: 20px; border: 1px solid #e5e5e0; }
-  .article-link { font-size: 11px; color: #2563eb; text-decoration: none; }
-  .article-link:hover { text-decoration: underline; }
-  .footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 2rem; }
-</style>
+<title>Pravven — Benefits clarity before benefits decisions</title>
+<meta name="description" content="Pravven helps you understand your benefits before you need to use them — what's actually covered, what it costs, and what to ask before you enroll." />
+<meta property="og:title" content="Pravven — Benefits clarity before benefits decisions" />
+<meta property="og:description" content="Pravven helps you understand your benefits before you need to use them — what's actually covered, what it costs, and what to ask before you enroll." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://pravven.com/" />
+<meta property="og:image" content="https://pravven.com/logo.png" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" type="image/png" href="logo.png" />
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<div class="container">
 
-  <div class="wp-header">
-    <h1>Pravven Brief</h1>
-    <p id="date-line"></p>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <img src="logo.png" alt="" />
+      <span>Pravven</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="brief.html">The Brief</a>
+      <a href="archive.html">Archive</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="subscribe.html">Subscribe</a>
+    </nav>
   </div>
+</header>
 
-  <div class="api-box">
-    <label for="api-key">Anthropic API key</label>
-    <input type="password" id="api-key" placeholder="sk-ant-..." autocomplete="off" />
-    <small>Your key stays in this browser tab only &nbsp;&middot;&nbsp; Get one at console.anthropic.com</small>
-  </div>
+<main>
 
-  <div class="controls">
-    <select id="feed-select">
-      <option value="all">All 4 feeds</option>
-      <option value="ij">Insurance Journal only</option>
-      <option value="ri">Risk &amp; Insurance only</option>
-      <option value="cm">Carrier Management only</option>
-      <option value="rn">Reinsurance News only</option>
-    </select>
-    <select id="count-select">
-      <option value="5">5 articles</option>
-      <option value="8" selected>8 articles</option>
-      <option value="12">12 articles</option>
-    </select>
-    <button id="run-btn" onclick="runPipeline()">Generate brief</button>
-    <span class="status" id="status"></span>
-  </div>
-
-  <div id="error-out"></div>
-
-  <div id="output" style="display:none;">
-    <div class="stat-row">
-      <div class="stat"><div class="stat-n" id="s-articles">0</div><div class="stat-l">articles</div></div>
-      <div class="stat"><div class="stat-n" id="s-sources">0</div><div class="stat-l">sources</div></div>
-      <div class="stat"><div class="stat-n" id="s-cost">$0</div><div class="stat-l">est. API cost</div></div>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">Pravven</p>
+      <h1>Clearer benefits.<br />Smarter decisions.</h1>
+      <p class="subhead">Benefits clarity before benefits decisions.</p>
+      <p class="lede">Pravven helps you understand your benefits before you need to use them — what's actually covered, what it costs, and what to ask before you enroll. We're not a replacement for HR, your broker, or a lawyer. We're the clarity layer in between.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="brief.html">Read the latest brief</a>
+        <a class="btn btn-ghost" href="subscribe.html">Get it by email</a>
+      </div>
     </div>
-    <div class="copy-row">
-      <button id="copy-btn" onclick="copyAsEmail()">Copy as email</button>
-      <span class="status" id="copy-status"></span>
+  </section>
+
+  <section class="section section-alt">
+    <div class="wrap">
+      <p class="section-label">The Pravven Brief</p>
+      <h2>What moved in insurance this week, and why it matters.</h2>
+      <p class="muted" style="max-width:640px;margin-bottom:32px;">Each issue reviews the day's reporting across Insurance Journal, Risk &amp; Insurance, Carrier Management and Reinsurance News, then keeps only the developments that materially change something — for carriers, brokers, reinsurers or benefits leaders.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>What happened</h3>
+          <p>The material development, with the figures, dates and values preserved. Announced plans are kept distinct from completed actions.</p>
+        </div>
+        <div class="card">
+          <h3>Why it matters</h3>
+          <p>The commercial implication — for risk, capital, capacity, pricing, underwriting, claims, regulation or distribution — and who it lands on.</p>
+        </div>
+        <div class="card">
+          <h3>What to watch</h3>
+          <p>The next observable decision, filing, renewal or result. No unsupported predictions, and a link to the original source every time.</p>
+        </div>
+      </div>
+
+      <p style="margin-top:32px;">
+        <a class="btn btn-primary" href="brief.html">Read the current issue</a>
+      </p>
     </div>
-    <div class="section-label">Articles</div>
-    <div id="articles-out"></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="section-label">Why Pravven</p>
+      <h2 style="max-width:640px;">Most people have benefits. Far fewer understand them.</h2>
+      <p class="muted" style="max-width:640px;">Plan documents are written to be accurate, not to be understood. The result is that people choose coverage without knowing what it actually costs them, what their plan excludes, or what they should have asked first.</p>
+      <p class="muted" style="max-width:640px;">Pravven is being built to close that gap — starting with plain-language industry intelligence, and moving toward tools that make an individual benefits decision easier to get right.</p>
+      <p style="margin-top:26px;"><a class="btn btn-ghost" href="about.html">More about Pravven</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="" />
+        <span>Pravven</span>
+      </a>
+      <p class="f-tag">Benefits clarity before benefits decisions.</p>
+    </div>
+    <div class="footer-nav">
+      <div class="footer-col">
+        <h4>Read</h4>
+        <a href="brief.html">The Brief</a>
+        <a href="archive.html">Archive</a>
+        <a href="subscribe.html">Subscribe</a>
+      </div>
+      <div class="footer-col">
+        <h4>Pravven</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
   </div>
+  <div class="wrap">
+    <p class="footer-base">© 2026 Pravven. The Pravven Brief is general industry information, not legal, medical, tax or insurance advice. Coverage decisions should be confirmed with your plan documents, HR team, broker or carrier.</p>
+  </div>
+</footer>
 
-  <div class="footer">Pravven Brief &nbsp;&middot;&nbsp; Insurance Journal &middot; Risk &amp; Insurance &middot; Carrier Management &middot; Reinsurance News</div>
-</div>
-
-<script>
-var FEEDS = {
-  ij: { label: "Insurance Journal",  url: "https://www.insurancejournal.com/rss/news" },
-  ri: { label: "Risk & Insurance",   url: "https://riskandinsurance.com/feed/" },
-  cm: { label: "Carrier Management", url: "https://www.carriermanagement.com/feed/" },
-  rn: { label: "Reinsurance News",   url: "https://www.reinsurancene.ws/feed/" }
-};
-
-var WORKER_URL = "https://rss-proxy.teprince123.workers.dev";
-var lastArticles = [];
-var lastResult = { articles: [] };
-
-document.getElementById("date-line").textContent =
-  "Executive Insurance Intelligence  \u00b7  " +
-  new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
-
-function setStatus(msg, type) {
-  var el = document.getElementById("status");
-  el.textContent = msg;
-  el.className = "status" + (type ? " " + type : "");
-}
-function showError(msg) {
-  document.getElementById("error-out").innerHTML = '<div class="error-box">&#9888; ' + msg + '</div>';
-}
-function clearError() { document.getElementById("error-out").innerHTML = ""; }
-
-async function fetchViaWorker(feedUrl) {
-  try {
-    var r = await fetch(WORKER_URL + "/?url=" + encodeURIComponent(feedUrl), { signal: AbortSignal.timeout(10000) });
-    if (!r.ok) return [];
-    var xml = await r.text();
-    var doc = new DOMParser().parseFromString(xml, "text/xml");
-    return Array.from(doc.querySelectorAll("item")).slice(0, 6);
-  } catch(e) { return []; }
-}
-
-async function fetchFeed(key) {
-  var feed = FEEDS[key];
-  var items = await fetchViaWorker(feed.url);
-  return items.map(function(item) {
-    var titleEl = item.querySelector("title");
-    var linkEl  = item.querySelector("link");
-    return {
-      title:  titleEl ? titleEl.textContent.trim() : "Untitled",
-      url:    linkEl  ? linkEl.textContent.trim()  : "",
-      source: feed.label
-    };
-  });
-}
-
-async function summarizeArticles(articles, apiKey) {
-  var list = articles.map(function(a, i) {
-    return (i + 1) + ". [" + a.source + "] " + a.title + "\nURL: " + a.url;
-  }).join("\n\n");
-
-  var prompt = "You are producing a Pravven Brief: a structured, executive-level summary of material insurance-industry news.\n\n" +
-    "A Pravven Brief identifies what materially happened, who is affected, why it matters commercially, and what professionals should monitor next.\n\n" +
-    "AUDIENCE: Senior carrier executives, brokers, reinsurers, employee-benefits leaders, wholesale and specialty professionals at firms such as Liberty Mutual, Marsh, Travelers, Aon, Hanover, Everest, Swiss Re, Sun Life, Lockton, WTW, Guy Carpenter, and Amwins.\n\n" +
-    "VOICE: Clear. Calm. Precise. Commercially relevant. Insurance-literate. Evidence-based. Decision-oriented. Assume deep industry knowledge. Never explain basic concepts. State specifically what may change, for whom, and why. Avoid generic statements. Avoid exaggerated language.\n\n" +
-    "ACCURACY: Distinguish completed actions from announced plans. Preserve material figures, dates, transaction values, premium changes, loss estimates. Attribute estimates and forecasts. Distinguish proposed from effective regulations and announced from completed transactions.\n\n" +
-    "ARTICLE SELECTION: Prioritize material developments affecting risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, competition, operating models, or technology. Deprioritize routine appointments without strategic implications and local incidents with no broader market implications.\n\n" +
-    "DUPLICATE HANDLING: If multiple articles cover the same event, treat as one development. Use strongest factual source as primary. List others in supporting_sources.\n\n" +
-    "Here are the articles:\n" + list + "\n\n" +
-    "Return one valid JSON object only. No markdown, no code fences, no commentary.\n\n" +
-    "{\n" +
-    "  \"brief_name\": \"Pravven Brief\",\n" +
-    "  \"articles_reviewed\": " + articles.length + ",\n" +
-    "  \"articles_included\": 0,\n" +
-    "  \"articles\": [\n" +
-    "    {\n" +
-    "      \"article_title\": \"Original primary article title\",\n" +
-    "      \"source_publication\": \"Primary source publication name\",\n" +
-    "      \"source_url\": \"Primary article URL\",\n" +
-    "      \"supporting_sources\": [],\n" +
-    "      \"what_happened\": \"Concise explanation of the material development. Preserve key figures, dates, values. Max 500 characters.\",\n" +
-    "      \"mentioned\": [\"Company, person, regulator, or geography materially involved\"],\n" +
-    "      \"most_relevant_to\": [\"Most directly affected audience such as carrier executives, brokers, reinsurers, employee-benefits leaders, wholesale professionals, underwriting leaders, claims leaders, risk managers, or regulatory teams\"],\n" +
-    "      \"why_it_matters\": \"Why this matters to the most directly affected stakeholders. Focus on implications for risk, capital, capacity, pricing, underwriting, claims, regulation, distribution, consolidation, or technology. Max 500 characters.\",\n" +
-    "      \"what_to_watch\": \"Next observable decision, regulatory action, market response, financial result, or risk indicator to monitor. No unsupported predictions. Max 350 characters.\"\n" +
-    "    }\n" +
-    "  ]\n" +
-    "}\n\n" +
-    "Return exactly " + articles.length + " objects in the same order as input. Set articles_included to the count of articles with substantive summaries. If content is insufficient set what_happened to: Insufficient article content for a reliable summary.";
-
-  var res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true"
-    },
-    body: JSON.stringify({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 3000,
-      messages: [{ role: "user", content: prompt }]
-    })
-  });
-
-  if (!res.ok) {
-    var err = await res.json().catch(function() { return {}; });
-    throw new Error((err.error && err.error.message) || ("API error " + res.status));
-  }
-  var data = await res.json();
-  var raw = data.content[0].text.replace(/```json|```/g, "").trim();
-  return JSON.parse(raw);
-}
-
-function renderArticles(articles, result) {
-  var container = document.getElementById("articles-out");
-  container.innerHTML = "";
-  var arts = result.articles || [];
-  arts.forEach(function(s, i) {
-    if (!s) return;
-    var mentioned  = Array.isArray(s.mentioned) ? s.mentioned.join(", ") : (s.mentioned || "");
-    var audience   = Array.isArray(s.most_relevant_to) ? s.most_relevant_to : [];
-    var sourceUrl  = s.source_url || (articles[i] ? articles[i].url : "");
-    var sourcePub  = s.source_publication || (articles[i] ? articles[i].source : "");
-    var title      = s.article_title || (articles[i] ? articles[i].title : "");
-    var card = document.createElement("div");
-    card.className = "article-card";
-    var html =
-      '<div class="article-heading">' + title + '</div>' +
-      '<div class="fact-row"><span class="fact-label">What happened?</span><span class="fact-value">' + (s.what_happened || "") + '</span></div>' +
-      '<div class="fact-row"><span class="fact-label">Mentioned in article</span><span class="fact-value">' + mentioned + '</span></div>' +
-      '<div class="fact-row"><span class="fact-label">Why it matters?</span><span class="fact-value">' + (s.why_it_matters || "") + '</span></div>';
-    if (s.what_to_watch) {
-      html += '<div class="watch-box"><div class="watch-label">What to watch</div>' + s.what_to_watch + '</div>';
-    }
-    if (audience.length) {
-      html += '<div class="audience-pills">' + audience.map(function(a) {
-        return '<span class="audience-pill">' + a + '</span>';
-      }).join("") + '</div>';
-    }
-    html += '<div class="card-footer"><span class="source-badge">' + sourcePub + '</span>';
-    if (sourceUrl) {
-      html += '<a class="article-link" href="' + sourceUrl + '" target="_blank" rel="noopener">Read full article &#8594;</a>';
-    }
-    html += '</div>';
-    card.innerHTML = html;
-    container.appendChild(card);
-  });
-}
-
-async function runPipeline() {
-  clearError();
-  document.getElementById("output").style.display = "none";
-  var apiKey = document.getElementById("api-key").value.trim();
-  if (!apiKey || !apiKey.startsWith("sk-ant-")) {
-    showError("Please enter your Anthropic API key above (starts with sk-ant-). Get one at console.anthropic.com");
-    return;
-  }
-  document.getElementById("run-btn").disabled = true;
-  var feedSel  = document.getElementById("feed-select").value;
-  var count    = parseInt(document.getElementById("count-select").value);
-  var feedKeys = feedSel === "all" ? ["ij", "ri", "cm", "rn"] : [feedSel];
-  var articles = [];
-  for (var k = 0; k < feedKeys.length; k++) {
-    setStatus("Fetching " + FEEDS[feedKeys[k]].label + "...", "loading");
-    var items = await fetchFeed(feedKeys[k]);
-    articles = articles.concat(items);
-  }
-  articles = articles.slice(0, count);
-  if (!articles.length) {
-    showError("Could not fetch articles. Check that your Cloudflare Worker is deployed.");
-    setStatus(""); document.getElementById("run-btn").disabled = false; return;
-  }
-  setStatus("Generating Pravven Brief for " + articles.length + " articles...", "loading");
-  var result;
-  try {
-    result = await summarizeArticles(articles, apiKey);
-  } catch(e) {
-    showError("Summarization failed: " + e.message);
-    setStatus(""); document.getElementById("run-btn").disabled = false; return;
-  }
-  renderArticles(articles, result);
-  lastArticles = articles;
-  lastResult   = result;
-  var sources = {};
-  articles.forEach(function(a) { sources[a.source] = 1; });
-  document.getElementById("s-articles").textContent = result.articles_included || articles.length;
-  document.getElementById("s-sources").textContent  = Object.keys(sources).length;
-  document.getElementById("s-cost").textContent     = "$" + (articles.length * 0.006).toFixed(2);
-  document.getElementById("output").style.display = "block";
-  setStatus("Done \u2713", "done");
-  document.getElementById("run-btn").disabled = false;
-}
-
-function copyAsEmail() {
-  var dateStr = new Date().toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
-  var text = "PRAVVEN BRIEF\n" + dateStr + "\n==================================================\n\n";
-  var arts = lastResult.articles || [];
-  arts.forEach(function(s, i) {
-    if (!s) return;
-    var mentioned = Array.isArray(s.mentioned) ? s.mentioned.join(", ") : (s.mentioned || "");
-    var audience  = Array.isArray(s.most_relevant_to) ? s.most_relevant_to.join(", ") : "";
-    var sourceUrl = s.source_url || (lastArticles[i] ? lastArticles[i].url : "");
-    var sourcePub = s.source_publication || (lastArticles[i] ? lastArticles[i].source : "");
-    text += (i + 1) + ". " + (s.article_title || "") + "\n";
-    text += "----------------------------------------\n";
-    text += "What happened: " + (s.what_happened || "") + "\n\n";
-    text += "Mentioned: " + mentioned + "\n\n";
-    text += "Why it matters: " + (s.why_it_matters || "") + "\n\n";
-    if (s.what_to_watch) text += "What to watch: " + s.what_to_watch + "\n\n";
-    if (audience) text += "Most relevant to: " + audience + "\n\n";
-    text += "Source: " + sourcePub + "\n";
-    if (sourceUrl) text += "Read more: " + sourceUrl + "\n";
-    text += "\n\n";
-  });
-  text += "Pravven Brief  \u00b7  Insurance Journal \u00b7 Risk & Insurance \u00b7 Carrier Management \u00b7 Reinsurance News";
-  navigator.clipboard.writeText(text).then(function() {
-    var el = document.getElementById("copy-status");
-    el.textContent = "Copied! Paste into your email.";
-    el.className = "status copied";
-    setTimeout(function() { el.textContent = ""; }, 4000);
-  }).catch(function() {
-    var el = document.getElementById("copy-status");
-    el.textContent = "Copy failed - select and copy manually.";
-    el.className = "status error";
-  });
-}
-</script>
 </body>
 </html>
