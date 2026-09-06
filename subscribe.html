@@ -44,7 +44,7 @@
 
     <div class="form-card" style="margin-top:30px;">
 
-      <form id="subscribe-form" method="post" target="_blank" novalidate hidden>
+      <form id="subscribe-form" method="post" target="_blank" hidden>
         <div class="field">
           <label for="sub-email">Email address</label>
           <input type="email" id="sub-email" name="EMAIL" autocomplete="email" required placeholder="you@company.com" />
@@ -53,11 +53,59 @@
           <label for="sub-fname">First name <span class="muted" style="font-weight:400;">(optional)</span></label>
           <input type="text" id="sub-fname" name="FNAME" autocomplete="given-name" />
         </div>
+
+        <div class="field">
+          <label for="sub-role">Which best describes your role?</label>
+          <select id="sub-role" name="MMERGE7" required>
+            <option value="">Select one…</option>
+            <option value="Broker / Consultant">Broker / Consultant</option>
+            <option value="HR / Benefits / People">HR / Benefits / People</option>
+            <option value="Carrier / Insurer">Carrier / Insurer</option>
+            <option value="Reinsurance">Reinsurance</option>
+            <option value="Underwriting / Product">Underwriting / Product</option>
+            <option value="Risk Management">Risk Management</option>
+            <option value="Employer / Business Leader">Employer / Business Leader</option>
+            <option value="Insurance Technology / Vendor">Insurance Technology / Vendor</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <fieldset class="field">
+          <legend>What do you want to stay ahead of?</legend>
+          <p class="field-hint">Pick as many as apply. We use this to decide what leads your issue — you still get the whole Brief.</p>
+          <div class="checks">
+            <label><input type="checkbox" name="group[13543][1]" value="1" /> Employee benefits and healthcare costs</label>
+            <label><input type="checkbox" name="group[13543][2]" value="2" /> Property and casualty</label>
+            <label><input type="checkbox" name="group[13543][4]" value="4" /> Reinsurance and capital</label>
+            <label><input type="checkbox" name="group[13543][8]" value="8" /> Underwriting, claims and risk</label>
+            <label><input type="checkbox" name="group[13543][16]" value="16" /> Regulation and compliance</label>
+            <label><input type="checkbox" name="group[13543][32]" value="32" /> Mergers, acquisitions and market moves</label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="sub-resp">What are you responsible for? <span class="muted" style="font-weight:400;">(optional)</span></label>
+          <select id="sub-resp" name="MMERGE8">
+            <option value="">Select one…</option>
+            <option value="Advising clients">Advising clients</option>
+            <option value="Buying / managing insurance">Buying / managing insurance</option>
+            <option value="Designing benefits">Designing benefits</option>
+            <option value="Underwriting risk">Underwriting risk</option>
+            <option value="Managing claims">Managing claims</option>
+            <option value="Managing employees">Managing employees</option>
+            <option value="Managing risk">Managing risk</option>
+            <option value="Building insurance products">Building insurance products</option>
+            <option value="Running / growing an insurance business">Running / growing an insurance business</option>
+            <option value="Research / strategy">Research / strategy</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
         <div aria-hidden="true" style="position:absolute;left:-5000px;">
           <input type="text" id="mc-bot-field" name="" tabindex="-1" value="" />
         </div>
         <button class="btn btn-primary" type="submit">Subscribe</button>
-        <p class="form-note">We use your email to send the Brief and nothing else. No sharing, no selling.</p>
+        <p class="form-note">We use your email to send the Brief and nothing else. No sharing, no selling. Your role and topics only shape how each issue is ordered for you.</p>
       </form>
 
       <div id="subscribe-fallback" hidden>

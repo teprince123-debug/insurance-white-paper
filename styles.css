@@ -394,6 +394,67 @@ p + p { margin-top: 15px; }
 }
 .field textarea { min-height: 140px; resize: vertical; }
 .form-note { font-size: 13.5px; color: var(--slate-light); margin-top: 14px; }
+
+/* select — matched to the text inputs above, with a drawn caret */
+.field select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--navy);
+  padding: 12px 40px 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background-color: var(--warm);
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%2351637A' stroke-width='1.6' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color .15s, background-color .15s;
+}
+.field select:focus {
+  outline: none;
+  border-color: var(--teal);
+  background-color: #fff;
+}
+
+/* checkbox list */
+.field-hint {
+  font-size: 13px;
+  color: var(--slate-light);
+  font-weight: 400;
+  margin: -2px 0 10px;
+}
+.checks { display: grid; gap: 8px; }
+@media (min-width: 620px) { .checks { grid-template-columns: 1fr 1fr; gap: 8px 20px; } }
+.checks label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.4;
+  margin: 0;
+  cursor: pointer;
+}
+.checks input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+fieldset.field { border: 0; padding: 0; margin: 0 0 18px; }
+fieldset.field legend {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+  padding: 0;
+}
 .form-fallback {
   margin-top: 24px;
   padding-top: 20px;
